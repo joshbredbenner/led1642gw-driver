@@ -1,0 +1,11 @@
+# STM32CubeIDE project files and build artifacts
+.metadata/
+.settings/
+Debug/
+Release/
+*.launch
+*.ld
+*.elf
+*.hex
+*.bin
+*.map
