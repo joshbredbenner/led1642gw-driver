@@ -57,6 +57,13 @@ typedef struct
 
 } LED1642GW_Handle_t;
 
+typedef enum
+{
+	WRITE_SWITCH,
+	DATA_LATCH,
+	GLOBAL_LATCH,
+} LE_Setting_t;
+
 /* Function Prototypes -------------------------------------------------------*/
 
 /**
@@ -85,7 +92,7 @@ void LED1642GW_Init(LED1642GW_Handle_t *dev,
  * @param  data: 16-bit data (1 bit per channel, MSB is CH15, LSB is CH0).
  * @retval None
  */
-static void LED1642GW_ShiftOut(LED1642GW_Handle_t *dev, uint16_t data);
+void LED1642GW_ShiftOut(LED1642GW_Handle_t *dev, uint16_t data, LE_Setting_t setting);
 
 /**
  * @brief  Writes data to a single IC or a daisy-chain of ICs.
@@ -97,13 +104,6 @@ static void LED1642GW_ShiftOut(LED1642GW_Handle_t *dev, uint16_t data);
  * @retval None
  */
 void LED1642GW_WriteDaisy(LED1642GW_Handle_t *dev, uint16_t *channel_data_array, uint8_t num_ics);
-
-/**
- * @brief  Pulses the Latch Enable (LE) pin to latch data.
- * @param  dev: Pointer to the driver handle.
- * @retval None
- */
-void LED1642GW_Latch(LED1642GW_Handle_t *dev);
 
 /**
  * @brief  Sets the Output Enable (OE) pin state.
