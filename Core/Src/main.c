@@ -22,6 +22,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "led1642gw.h"
+#include "stdbool.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -54,7 +55,7 @@ static void MX_GPIO_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_USB_OTG_FS_PCD_Init(void);
 /* USER CODE BEGIN PFP */
-
+static uint8_t convert_char(char symbol);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -96,6 +97,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   // Create the driver handle
   LED1642GW_Handle_t hLedDriver;
+  char number = '0';
 
   // Initialize the driver with your chosen pins
   // (Replace with your actual GPIO Ports and Pins)
@@ -123,18 +125,19 @@ int main(void)
 
 	// Set data for the first IC (closest to MCU)
 	// Turn on channels 0, 2, 4
-	led_data[0] = 0xFFFF;
+	led_data[0] = (uint16_t)(convert_char(number) | 0b00001000);
 
 	// Send the data to the daisy chain
 	LED1642GW_WriteDaisy(&hLedDriver, led_data, NUM_DRIVERS);
 
+	if (number == '9') {
+		number = '0';
+	} else {
+		number++;
+	}
+
 	HAL_Delay(1000); // Wait 1 second
 
-	// Turn them all off
-	led_data[0] = 0x0000;
-	LED1642GW_WriteDaisy(&hLedDriver, led_data, NUM_DRIVERS);
-
-	HAL_Delay(1000);
   }
   /* USER CODE END 3 */
 }
@@ -358,7 +361,46 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+static uint8_t convert_char(char symbol) {
 
+	uint8_t data = 0;
+	switch (symbol) {
+	case '-':
+		data = 0b00010000;
+		break;
+	case '0':
+		data = 0b11100111;
+		break;
+	case '1':
+		data = 0b10000100;
+		break;
+	case '2':
+		data = 0b11010011;
+		break;
+	case '3':
+		data = 0b11010110;
+		break;
+	case '4':
+		data = 0b10110100;
+		break;
+	case '5':
+		data = 0b01110110;
+		break;
+	case '6':
+		data = 0b01110111;
+		break;
+	case '7':
+		data = 0b11000100;
+		break;
+	case '8':
+		data = 0b11110111;
+		break;
+	case '9':
+		data = 0b11110100;
+		break;
+	}
+	return data;
+}
 /* USER CODE END 4 */
 
 /**

@@ -104,7 +104,7 @@ void LED1642GW_Init(LED1642GW_Handle_t *dev,
     	LED1642GW_ShiftOut(dev, 0x000F, DATA_LATCH);
     	HAL_Delay(1);
     }
-    	LED1642GW_ShiftOut(dev, 0x000F, GLOBAL_LATCH);
+    LED1642GW_ShiftOut(dev, 0x000F, GLOBAL_LATCH);
 
 }
 
